@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import Any, Self, TypeAlias
 
 from cytoolz import (
@@ -46,7 +47,7 @@ class Grams:
         self,
         window_size: int,
         threshold: int,
-    ) -> Self:
+    ):
 
         self.window_size = window_size
         self.threshold = threshold
