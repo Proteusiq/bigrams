@@ -1,5 +1,4 @@
-from __future__ import annotations
-
+from __future__ import annotationsbl
 from typing import Any, TypeAlias
 
 from cytoolz import (
