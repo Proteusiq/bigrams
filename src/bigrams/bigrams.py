@@ -1,4 +1,4 @@
-from typing import Any, TypeAlias
+from typing import Any, TypeAlias, Self
 
 from cytoolz import (
     compose,
@@ -45,7 +45,7 @@ class Grams:
         self,
         window_size: int,
         threshold: int,
-    ):
+    ) -> Self:
 
         self.window_size = window_size
         self.threshold = threshold
@@ -54,7 +54,7 @@ class Grams:
         # pragma: no cover
         return f"{self.__class__.__name__}(window_size={self.window_size}, threshold={self.threshold})"
 
-    def fit(self, X: Sentences) -> Grams:
+    def fit(self, X: Sentences) -> Self:
 
         X_ = self.__ngrams(X=X)
         self.X_mapper = {gram: "_".join(gram) for gram in X_}
