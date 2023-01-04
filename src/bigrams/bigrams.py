@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import Any, TypeAlias
 
 from cytoolz import (
@@ -56,7 +57,7 @@ class Grams:
 
         return f"{self.__class__.__name__}(window_size={self.window_size}, threshold={self.threshold})"
 
-    def fit(self, X: Sentences) -> "Grams":
+    def fit(self, X: Sentences) -> Grams:
 
         X_ = self.__ngrams(X=X)
         self.X_mapper = {gram: "_".join(gram) for gram in X_}
