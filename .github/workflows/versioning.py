@@ -1,5 +1,5 @@
 # if commit messages contain feat: --> minor, if ! --> major, everything else --> patch
-
+# flake8: noqa
 import subprocess
 from typing import Literal
 

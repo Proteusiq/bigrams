@@ -1,70 +1,87 @@
+from typing import Any, TypeAlias
+
 from cytoolz import (
     compose,
+    concatv,
     frequencies,
     itemfilter,
+    map,
     partial,
     sliding_window,
-    map,
-    concatv,
 )
 from more_itertools import replace
 
+Sentences: TypeAlias = list[list[str]]
+Dictionary: TypeAlias = dict[tuple[str, str], int]
+Replacer: TypeAlias = list[list[str] | str]
 
-# our predict function
-def replacer(sentence, bigrams_mapper: dict[tuple[str, str], str], window_size: int):
+
+def replacer(
+    sentence: Sentences,
+    bigrams_mapper: dict[tuple[str, str], str],
+    window_size: int,
+) -> Replacer:
+    # our predict function
     # smart replacer
     # place for improvement
 
     for key, value in bigrams_mapper.items():
-        pred = lambda *args: args == key
+        pred = lambda *args: args == key  # flake8: noqa
         substitutes = [value]
 
-        sentence = [
-            t for t in replace(sentence, pred, substitutes, window_size=window_size)
+        sentence_ = [
+            t
+            for t in replace(
+                sentence,
+                pred,
+                substitutes,
+                window_size=window_size,
+            )
         ]
-    return sentence
+    return sentence_
 
 
 class Grams:
-    def __init__(self, window_size: int, threshold: int) -> "Grams":
+    def __init__(
+        self,
+        window_size: int,
+        threshold: int,
+    ):
 
         self.window_size = window_size
         self.threshold = threshold
 
-    def __repr__(self):
-        return f"{self.__class__.__name__}({self.__dict__})"
+    def __repr__(self) -> str:
 
-    def fit(self, X):
+        return f"{self.__class__.__name__}(window_size={self.window_size}, threshold={self.threshold})"
+
+    def fit(self, X: Sentences) -> "Grams":
 
         X_ = self.__ngrams(X=X)
         self.X_mapper = {gram: "_".join(gram) for gram in X_}
 
         return self
 
-    def transform(self, X):
+    def transform(self, X: Sentences) -> Sentences:
 
         return self.__replacer(Xi=X)
 
-    def __ngram(self, X: list[list[str]]):
+    def __ngram(self, X: Sentences) -> Any:
 
         return sliding_window(self.window_size, concatv(*X))
 
-    def __clip(self, X: dict[str, int]):
+    def __clip(self, X: dict[str, int]) -> Any | bool:
         _, v = X
-        return v >= self.threshold
+        return v >= self.threshold  # type: ignore
 
-    def __ngrams(self, X):
+    def __ngrams(self, X: Sentences) -> Any | Dictionary:
 
-        wordcount = compose(
-            frequencies, self.__ngram
-        )
-        dictionary = itemfilter(
-            self.__clip, wordcount(X)
-        )
+        wordcount = compose(frequencies, self.__ngram)
+        dictionary = itemfilter(self.__clip, wordcount(X))
 
         return dictionary
 
-    def __replacer(self, Xi):
+    def __replacer(self, Xi: Sentences) -> Sentences:
         # smart replacer
         # place for improvement
 
