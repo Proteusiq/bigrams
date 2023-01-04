@@ -1,4 +1,4 @@
-from __future__ import annotationsbl
+from __future__ import annotations
 
 from typing import Any, TypeAlias
 
