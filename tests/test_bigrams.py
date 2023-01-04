@@ -1,4 +1,4 @@
-from bigrams import replacer, Grams
+from bigrams import Grams, replacer
 
 IN_SENTENCES = [
     ["this", "is", "new", "york", "baby", "again!"],
@@ -16,16 +16,21 @@ BIGRAMS_MAPPER = {
 }
 
 
-def test_replacer():
+def test_replacer() -> None:
 
-    sentences = [replacer(sentence=s,
-        bigrams_mapper=BIGRAMS_MAPPER,
-        window_size=2,
-    ) for s in IN_SENTENCES]
-    
+    sentences = [
+        replacer(
+            sentence=s,
+            bigrams_mapper=BIGRAMS_MAPPER,
+            window_size=2,
+        )
+        for s in IN_SENTENCES
+    ]
+
     assert sentences == OUT_SENTENCES
 
-def test_grams():
+
+def test_grams() -> None:
 
     bi = Grams(window_size=2, threshold=2)
     sentences = bi.fit(X=IN_SENTENCES).transform(X=IN_SENTENCES)

@@ -17,7 +17,6 @@ Sentences: TypeAlias = list[list[str]]
 Dictionary: TypeAlias = dict[tuple[str, str], int]
 
 
-
 def replacer(
     sentence: list[str],
     bigrams_mapper: dict[tuple[str, str], str],
