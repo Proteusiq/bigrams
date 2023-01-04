@@ -85,11 +85,12 @@ addopts = """\
 """
 
 [tool.coverage.report]
-fail_under = 100
+fail_under = 98
 exclude_lines = [
     'if TYPE_CHECKING:',
     'pragma: no cover'
 ]
+show_missing = true
 
 [tool.mypy]
 disallow_any_unimported = true

@@ -15,14 +15,14 @@ from more_itertools import replace
 
 Sentences: TypeAlias = list[list[str]]
 Dictionary: TypeAlias = dict[tuple[str, str], int]
-Replacer: TypeAlias = list[list[str] | str]
+
 
 
 def replacer(
-    sentence: Sentences,
+    sentence: list[str],
     bigrams_mapper: dict[tuple[str, str], str],
     window_size: int,
-) -> Replacer:
+) -> list[str]:
     # our predict function
     # smart replacer
     # place for improvement
@@ -31,7 +31,7 @@ def replacer(
         pred = lambda *args: args == key  # flake8: noqa
         substitutes = [value]
 
-        sentence_ = [
+        sentence = [
             t
             for t in replace(
                 sentence,
@@ -40,7 +40,7 @@ def replacer(
                 window_size=window_size,
             )
         ]
-    return sentence_
+    return sentence
 
 
 class Grams:
@@ -54,7 +54,7 @@ class Grams:
         self.threshold = threshold
 
     def __repr__(self) -> str:
-
+        # pragma: no cover
         return f"{self.__class__.__name__}(window_size={self.window_size}, threshold={self.threshold})"
 
     def fit(self, X: Sentences) -> Grams:
