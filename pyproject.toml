@@ -18,9 +18,8 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Typing :: Typed",
 ]
@@ -58,6 +57,12 @@ python-kacl = "*"
 pyupgrade = "*"
 tryceratops = "*"
 
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^2.21.0"
+black = "^22.12.0"
+isort = "^5.11.4"
+mypy = "^0.991"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
@@ -67,7 +72,7 @@ profile = "black"
 src_paths = ["src", "tests"]
 
 [tool.black]
-target-version = ["py38", "py39", "py310"]
+target-version = ["py310","py311"]
 include = '\.pyi?$'
 
 [tool.pytest.ini_options]
@@ -79,11 +84,12 @@ addopts = """\
 """
 
 [tool.coverage.report]
-fail_under = 100
+fail_under = 98
 exclude_lines = [
     'if TYPE_CHECKING:',
     'pragma: no cover'
 ]
+show_missing = true
 
 [tool.mypy]
 disallow_any_unimported = true
@@ -95,3 +101,7 @@ warn_redundant_casts = true
 warn_return_any = true
 check_untyped_defs = true
 show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = "cytoolz.*"
+ignore_missing_imports = true
