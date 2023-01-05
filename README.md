@@ -9,9 +9,7 @@
 ---
 
 **Documentation**: [https://proteusiq.github.io/bigrams](https://proteusiq.github.io/bigrams)
-
 **Source Code**: [https://github.com/proteusiq/bigrams](https://github.com/proteusiq/bigrams)
-
 **PyPI**: [https://pypi.org/project/bigrams/](https://pypi.org/project/bigrams/)
 
 ---
@@ -29,7 +27,7 @@ pip install bigrams
 * Clone this repository
 * Requirements:
   * [Poetry](https://python-poetry.org/)
-  * Python 3.8+
+  * Python 3.9+
 * Create a virtual environment and install the dependencies
 
 ```sh
@@ -88,5 +86,3 @@ pre-commit run --all-files
 ```
 
 ---
-
-This project was generated using the [wolt-python-package-cookiecutter](https://github.com/woltapp/wolt-python-package-cookiecutter) template.
