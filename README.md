@@ -8,8 +8,8 @@
 
 ---
 
-**Documentation**: [https://proteusiq.github.io/bigrams](https://proteusiq.github.io/bigrams)
 **Source Code**: [https://github.com/proteusiq/bigrams](https://github.com/proteusiq/bigrams)
+
 **PyPI**: [https://pypi.org/project/bigrams/](https://pypi.org/project/bigrams/)
 
 ---
@@ -19,7 +19,7 @@ Simply create (N)grams
 ## Installation
 
 ```sh
-pip install bigrams
+pip install -U bigrams
 ```
 
 ## Development
