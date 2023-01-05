@@ -11,15 +11,14 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/python-poetry-env
       - name: Decide semver version based on commit messages
-        id: bump-version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-        run: | # shellcheck disable=SC2046
+        run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           poetry version $(python .github/workflows/versioning.py)
           echo "::set-output name=version::$(poetry version --short)"
+        id: bump-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Commit pyproject.toml with version change
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
