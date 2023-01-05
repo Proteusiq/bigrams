@@ -1,4 +1,5 @@
 from collections.abc import Generator
+
 import pytest
 
 from .types import Artifacts
