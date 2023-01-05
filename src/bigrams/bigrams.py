@@ -67,18 +67,17 @@ class Grams:
 
         return self.__replacer(Xi=X)
 
-    def __ngram(self, X: Sentences) -> Any:
+    def fit_transform(self, X: Sentences) -> Sentences:
 
-        return sliding_window(self.window_size, concatv(*X))
-
-    def __clip(self, X: dict[str, int]) -> Any | bool:
-        _, v = X
-        return v >= self.threshold  # type: ignore
+        return self.fit(X).transform(X)
 
     def __ngrams(self, X: Sentences) -> Any | Dictionary:
 
-        wordcount = compose(frequencies, self.__ngram)
-        dictionary = itemfilter(self.__clip, wordcount(X))
+        wordcount = compose(
+            frequencies,
+            lambda s: sliding_window(self.window_size, concatv(*s)),
+        )
+        dictionary = itemfilter(lambda m: m[1] >= self.threshold, wordcount(X))
 
         return dictionary
 
