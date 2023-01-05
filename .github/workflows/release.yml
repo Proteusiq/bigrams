@@ -14,8 +14,8 @@ jobs:
         id: bump-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # shellcheck disable=SC2046
-        run: |
+        
+        run: | # shellcheck disable=SC2046
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           poetry version $(python .github/workflows/versioning.py)
