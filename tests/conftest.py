@@ -1,9 +1,9 @@
-from .types import Artifacts
+from collections.abc import Generator
 import pytest
 
-
+from .types import Artifacts
 
 
 @pytest.fixture()
-def artifacts() -> Artifacts:
+def artifacts() -> Generator[Artifacts, None, None]:
     yield Artifacts()

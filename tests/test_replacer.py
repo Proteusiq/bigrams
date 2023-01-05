@@ -1,8 +1,9 @@
-from .types import Artifacts
 from bigrams import replacer
 
+from .types import Artifacts
 
-def test_replacer(artifacts:Artifacts) -> None:
+
+def test_replacer(artifacts: Artifacts) -> None:
 
     sentences = [
         replacer(
