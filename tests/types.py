@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 
-@dataclass(frozen=True)
+@dataclass
 class Artifacts:
     bigram_mapper: dict = {
         ("new", "york"): "new_york",
