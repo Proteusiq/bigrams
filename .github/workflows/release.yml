@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/python-poetry-env
+      - name: Decide semver version based on commit messages
+        id: bump-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          # poetry version $(python .github/workflows/versioning.py)
+          # echo "::set-output name=version::$(poetry version --short)"
+      - name: Commit pyproject.toml with version change
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: bump version to ${{ steps.bump-version.outputs.version }}
+          file_pattern: pyproject.toml
+      - name: Publish to pypi
+        run: |
+          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          poetry publish --build --no-interaction
+      - name: Deploy docs
+        run: poetry run mkdocs gh-deploy --force
