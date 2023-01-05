@@ -17,8 +17,8 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-          # poetry version $(python .github/workflows/versioning.py)
-          # echo "::set-output name=version::$(poetry version --short)"
+          poetry version "$(python .github/workflows/versioning.py)"
+          echo "::set-output name=version::$(poetry version --short)"
       - name: Commit pyproject.toml with version change
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
