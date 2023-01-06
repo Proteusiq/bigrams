@@ -3,6 +3,7 @@ from collections.abc import Generator
 import pytest
 
 from bigrams import Grams
+
 from .types import Artifacts
 
 
@@ -25,5 +26,5 @@ def artifacts() -> Generator[Artifacts, None, None]:
 
 
 @pytest.fixture()
-def model() -> Grams:
+def model() -> Generator[Grams, None, None]:
     yield Grams(window_size=2, threshold=2)
