@@ -68,10 +68,32 @@ def replacer(
 
 
 class Grams:
+    """
+    Grams allows  you to transform a list of tokens into a list of (N)grams tokens
+
+    Arguments:
+        threshold: how many times should tokens appears together to be connected as ngrams
+        window_size: the N in (N)gram. how many words should be considered. defaults = 2
+
+    **Usage:**
+
+    ```python
+    from bigrams import Grams
+
+    in_sentences = [["this", "is", "new", "york", "baby", "again!"],
+                 ["new", "york", "and", "baby", "again!"],
+                ]
+    g = Grams(window_size=2, threshold=2)
+
+    out_sentences = g.fit_transform(in_stences)
+    out_sentences
+    ```
+    """
+
     def __init__(
         self,
-        window_size: int,
         threshold: int,
+        window_size: int = 2,
     ):
 
         self.window_size = window_size
