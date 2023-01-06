@@ -84,7 +84,8 @@ class Grams:
     def fit(self, X: Sentences) -> Grams:
 
         self.__grams = self.__ngrams(sentences=X)
-        self.X_mapper: Mapper = {gram: "_".join(gram) for gram in self.__grams}
+        self.__X_mapper: Mapper = {gram: "_".join(gram) for gram in self.__grams}
+        self.fitted_ = True
 
         return self
 
@@ -97,21 +98,33 @@ class Grams:
         return self.fit(X).transform(X)
 
     @property
-    def ngrams_(self) -> Any | Dictionary:
-        return self.__grams
+    def ngrams_(self) -> set[str]:
+        if not getattr(self, "fitted_", False):
+            raise RuntimeError(f"{self} is not fitted.")
+
+        return {value for value in self.__X_mapper.values()}
 
     @ngrams_.setter
     def ngrams_(self, grams: set[str]) -> None:
-        added_grams: Mapper = {tuple(gram.split("_")): gram for gram in grams}
-        self.X_mapper.update(added_grams)
+        if not getattr(self, "fitted_", False):
+            raise RuntimeError(f"{self} is not fitted. Cannot add grams.")
 
-    @ngrams_.deleter
-    def ngrams_(self, grams: set[str]) -> None:
+        added_grams: Mapper = {tuple(gram.split("_")): gram for gram in grams}
+        self.__X_mapper.update(added_grams)
+
+    def add_ngrams(self, grams: set[str]) -> Grams:
+        self.ngrams_ = grams
+        return self
+
+    def remove_ngrams(self, grams: set[str]) -> Grams:
+        if not getattr(self, "fitted_", False):
+            raise RuntimeError(f"{self} is not fitted. Cannot delete grams.")
         mapper = {
-            key: value for key, value in self.X_mapper.items() if value not in grams
+            key: value for key, value in self.__X_mapper.items() if value not in grams
         }
 
-        self.X_mapper = mapper
+        self.__X_mapper = mapper
+        return self
 
     def __ngrams(self, sentences: Sentences) -> Dictionary:
 
@@ -126,11 +139,9 @@ class Grams:
         return dictionary
 
     def __replacer(self, sentences: Sentences) -> Sentences:
-        # smart replacer
-        # place for improvement
 
         _replacer = partial(
-            replacer, bigrams_mapper=self.X_mapper, window_size=self.window_size
+            replacer, bigrams_mapper=self.__X_mapper, window_size=self.window_size
         )
 
         return [sentence for sentence in map(_replacer, sentences)]
