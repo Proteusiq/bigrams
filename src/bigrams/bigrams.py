@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, TypeAlias
+from typing import TypeAlias
 
 from cytoolz import (
     compose,
@@ -15,14 +15,39 @@ from more_itertools import replace
 
 Sentences: TypeAlias = list[list[str]]
 Dictionary: TypeAlias = dict[tuple[str, str], int]
+Mapper: TypeAlias = dict[tuple[str, ...], str]
 
 
 def replacer(
     sentence: list[str],
     bigrams_mapper: dict[tuple[str, str], str],
-    window_size: int,
+    window_size: int = 2,
 ) -> list[str]:
-    # our predict function
+    """
+    Helper function, returns a list of tokens with (N)grams connected
+
+    Args:
+        sentence (list[str]): sentence in form of tokens with grams
+        bigrams_mapper (dict[tuple[str, str], str]): a mapper of (t1, t2) => t1_t2
+        window_size (int): how many tokens to be considers: default 2
+
+    Returns:
+        list[str]: sentence in form of tokens with (N)grams
+
+    Usage:
+
+    ```python
+    from bigrams import replacer
+
+    bigram_mapper={("new", "york"): "new_york",}
+    in_sentence = ["this", "is", "new", "york", "baby", "again!"]
+    out_sentence = replacer(sentence=in_setnece,
+                            bigrams_mapper=bigrams_mapper,
+                            window_size=2,
+                    )
+    assert out_sentence == ["this", "is", "new_york", "baby", "again!"]
+    ```
+    """
     # smart replacer
     # place for improvement
 
@@ -43,51 +68,102 @@ def replacer(
 
 
 class Grams:
+    """
+    Grams allows  you to transform a list of tokens into a list of (N)grams tokens
+
+    Arguments:
+        threshold: how many times should tokens appears together to be connected as ngrams
+        window_size: the N in (N)gram. how many words should be considered. defaults = 2
+
+    **Usage:**
+
+    ```python
+    from bigrams import Grams
+
+    in_sentences = [["this", "is", "new", "york", "baby", "again!"],
+                 ["new", "york", "and", "baby", "again!"],
+                ]
+    g = Grams(window_size=2, threshold=2)
+
+    out_sentences = g.fit_transform(in_stences)
+    out_sentences
+    ```
+    """
+
     def __init__(
         self,
-        window_size: int,
         threshold: int,
+        window_size: int = 2,
     ):
 
         self.window_size = window_size
         self.threshold = threshold
 
     def __repr__(self) -> str:
-        # pragma: no cover
+
         return f"{self.__class__.__name__}(window_size={self.window_size}, threshold={self.threshold})"
 
     def fit(self, X: Sentences) -> Grams:
 
-        X_ = self.__ngrams(X=X)
-        self.X_mapper = {gram: "_".join(gram) for gram in X_}
+        self.__grams = self.__ngrams(sentences=X)
+        self.__X_mapper: Mapper = {gram: "_".join(gram) for gram in self.__grams}
+        self.fitted_ = True
 
         return self
 
     def transform(self, X: Sentences) -> Sentences:
 
-        return self.__replacer(Xi=X)
+        return self.__replacer(sentences=X)
 
     def fit_transform(self, X: Sentences) -> Sentences:
 
         return self.fit(X).transform(X)
 
-    def __ngrams(self, X: Sentences) -> Any | Dictionary:
+    @property
+    def ngrams_(self) -> set[str]:
+        if not getattr(self, "fitted_", False):
+            raise RuntimeError(f"{self} is not fitted.")
+
+        return {value for value in self.__X_mapper.values()}
+
+    @ngrams_.setter
+    def ngrams_(self, grams: set[str]) -> None:
+        if not getattr(self, "fitted_", False):
+            raise RuntimeError(f"{self} is not fitted. Cannot add grams.")
+
+        added_grams: Mapper = {tuple(gram.split("_")): gram for gram in grams}
+        self.__X_mapper.update(added_grams)
+
+    def add_ngrams(self, grams: set[str]) -> Grams:
+        self.ngrams_ = grams
+        return self
+
+    def remove_ngrams(self, grams: set[str]) -> Grams:
+        if not getattr(self, "fitted_", False):
+            raise RuntimeError(f"{self} is not fitted. Cannot delete grams.")
+        mapper = {
+            key: value for key, value in self.__X_mapper.items() if value not in grams
+        }
+
+        self.__X_mapper = mapper
+        return self
+
+    def __ngrams(self, sentences: Sentences) -> Dictionary:
 
         wordcount = compose(
             frequencies,
             lambda s: sliding_window(self.window_size, concatv(*s)),
         )
-        dictionary = itemfilter(lambda m: m[1] >= self.threshold, wordcount(X))
+        dictionary: Dictionary = itemfilter(
+            lambda m: m[1] >= self.threshold, wordcount(sentences)
+        )
 
         return dictionary
 
-    def __replacer(self, Xi: Sentences) -> Sentences:
-        # smart replacer
-        # place for improvement
+    def __replacer(self, sentences: Sentences) -> Sentences:
 
         _replacer = partial(
-            replacer, bigrams_mapper=self.X_mapper, window_size=self.window_size
+            replacer, bigrams_mapper=self.__X_mapper, window_size=self.window_size
         )
-        X_ = map(_replacer, Xi)
 
-        return [x for x in X_]
+        return [sentence for sentence in map(_replacer, sentences)]
