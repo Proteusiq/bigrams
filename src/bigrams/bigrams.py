@@ -20,9 +20,33 @@ Dictionary: TypeAlias = dict[tuple[str, str], int]
 def replacer(
     sentence: list[str],
     bigrams_mapper: dict[tuple[str, str], str],
-    window_size: int,
+    window_size: int = 2,
 ) -> list[str]:
-    # our predict function
+    """
+    Helper function, returns a list of tokens with (N)grams connected
+
+    Args:
+        sentence (list[str]): sentence in form of tokens with grams
+        bigrams_mapper (dict[tuple[str, str], str]): a mapper of (t1, t2) => t1_t2
+        window_size (int): how many tokens to be considers: default 2
+
+    Returns:
+        list[str]: sentence in form of tokens with (N)grams
+
+    Usage:
+
+    ```python
+    from bigrams import replacer
+
+    bigram_mapper={("new", "york"): "new_york",}
+    in_sentence = ["this", "is", "new", "york", "baby", "again!"]
+    out_sentence = replacer(sentence=in_setnece,
+                            bigrams_mapper=bigrams_mapper,
+                            window_size=2,
+                    )
+    assert out_sentence == ["this", "is", "new_york", "baby", "again!"]
+    ```
+    """
     # smart replacer
     # place for improvement
 
@@ -53,7 +77,7 @@ class Grams:
         self.threshold = threshold
 
     def __repr__(self) -> str:
-        # pragma: no cover
+
         return f"{self.__class__.__name__}(window_size={self.window_size}, threshold={self.threshold})"
 
     def fit(self, X: Sentences) -> Grams:
