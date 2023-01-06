@@ -15,6 +15,7 @@ from more_itertools import replace
 
 Sentences: TypeAlias = list[list[str]]
 Dictionary: TypeAlias = dict[tuple[str, str], int]
+Mapper: TypeAlias = dict[tuple[str, ...], str]
 
 
 def replacer(
@@ -82,8 +83,8 @@ class Grams:
 
     def fit(self, X: Sentences) -> Grams:
 
-        X_ = self.__ngrams(sentences=X)
-        self.X_mapper = {gram: "_".join(gram) for gram in X_}
+        self.__grams = self.__ngrams(sentences=X)
+        self.X_mapper: Mapper = {gram: "_".join(gram) for gram in self.__grams}
 
         return self
 
@@ -95,13 +96,32 @@ class Grams:
 
         return self.fit(X).transform(X)
 
-    def __ngrams(self, sentences: Sentences) -> Any | Dictionary:
+    @property
+    def ngrams_(self) -> Any | Dictionary:
+        return self.__grams
+
+    @ngrams_.setter
+    def ngrams_(self, grams: set[str]) -> None:
+        added_grams: Mapper = {tuple(gram.split("_")): gram for gram in grams}
+        self.X_mapper.update(added_grams)
+
+    @ngrams_.deleter
+    def ngrams_(self, grams: set[str]) -> None:
+        mapper = {
+            key: value for key, value in self.X_mapper.items() if value not in grams
+        }
+
+        self.X_mapper = mapper
+
+    def __ngrams(self, sentences: Sentences) -> Dictionary:
 
         wordcount = compose(
             frequencies,
             lambda s: sliding_window(self.window_size, concatv(*s)),
         )
-        dictionary = itemfilter(lambda m: m[1] >= self.threshold, wordcount(sentences))
+        dictionary: Dictionary = itemfilter(
+            lambda m: m[1] >= self.threshold, wordcount(sentences)
+        )
 
         return dictionary
 
