@@ -1,5 +1,6 @@
 # BiGrams
 ![bigrams](bigrams.png)
+>Simply create (N)grams
 
 [![PyPI](https://img.shields.io/pypi/v/bigrams?style=flat-square)](https://pypi.python.org/pypi/bigrams/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bigrams?style=flat-square)](https://pypi.python.org/pypi/bigrams/)
@@ -15,7 +16,7 @@
 
 ---
 
-Simply create (N)grams
+
 
 ## Installation
 
