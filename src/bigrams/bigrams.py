@@ -82,36 +82,35 @@ class Grams:
 
     def fit(self, X: Sentences) -> Grams:
 
-        X_ = self.__ngrams(X=X)
+        X_ = self.__ngrams(sentences=X)
         self.X_mapper = {gram: "_".join(gram) for gram in X_}
 
         return self
 
     def transform(self, X: Sentences) -> Sentences:
 
-        return self.__replacer(Xi=X)
+        return self.__replacer(sentences=X)
 
     def fit_transform(self, X: Sentences) -> Sentences:
 
         return self.fit(X).transform(X)
 
-    def __ngrams(self, X: Sentences) -> Any | Dictionary:
+    def __ngrams(self, sentences: Sentences) -> Any | Dictionary:
 
         wordcount = compose(
             frequencies,
             lambda s: sliding_window(self.window_size, concatv(*s)),
         )
-        dictionary = itemfilter(lambda m: m[1] >= self.threshold, wordcount(X))
+        dictionary = itemfilter(lambda m: m[1] >= self.threshold, wordcount(sentences))
 
         return dictionary
 
-    def __replacer(self, Xi: Sentences) -> Sentences:
+    def __replacer(self, sentences: Sentences) -> Sentences:
         # smart replacer
         # place for improvement
 
         _replacer = partial(
             replacer, bigrams_mapper=self.X_mapper, window_size=self.window_size
         )
-        X_ = map(_replacer, Xi)
 
-        return [x for x in X_]
+        return [sentence for sentence in map(_replacer, sentences)]
