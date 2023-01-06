@@ -22,6 +22,23 @@ Simply create (N)grams
 pip install -U bigrams
 ```
 
+## Usage
+
+```python
+from bigrams import Grams
+
+in_sentences = [["this", "is", "new", "york", "baby", "again!"],
+              ["new", "york", "and", "baby", "again!"],
+            ]
+g = Grams(window_size=2, threshold=2)
+
+out_sentences = g.fit_transform(in_stences)
+print(out_sentences)
+# [["this", "is", "new_york", "baby_again!"],
+#   ["new_york", "and", "baby_again!"],
+#  ]
+```
+
 ## Development
 
 * Clone this repository
