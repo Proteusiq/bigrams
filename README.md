@@ -8,6 +8,12 @@
 [![Coookiecutter - Wolt](https://img.shields.io/badge/cookiecutter-Wolt-00c2e8?style=flat-square&logo=cookiecutter&logoColor=D4AA00&link=https://github.com/woltapp/wolt-python-package-cookiecutter)](https://github.com/woltapp/wolt-python-package-cookiecutter)
 
 
+Welcome to bigrams, a Python project that provides a non-intrusive way to connect tokenized sentences in Ngrams. 
+This tool is designed to work with tokenized sentences, and it is focused on a single task: providing an efficient way 
+to merge tokens from a list of tokenized sentences.
+
+It's non-intrusive as it leaves tokenisation, stopwords removing and other text preprocessing out of its flow.
+
 ---
 
 **Source Code**: [https://github.com/proteusiq/bigrams](https://github.com/proteusiq/bigrams)
@@ -26,9 +32,12 @@ pip install -U bigrams
 
 ## Usage
 
+To use bigrams, import it into your Python script, and use `scikit-learn`-ish API to transform your tokens.
+
 ```python
 from bigrams import Grams
 
+# expects tokenised sentences 
 in_sentences = [["this", "is", "new", "york", "baby", "again!"],
               ["new", "york", "and", "baby", "again!"],
             ]
