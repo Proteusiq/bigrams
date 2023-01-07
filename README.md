@@ -8,11 +8,11 @@
 [![Coookiecutter - Wolt](https://img.shields.io/badge/cookiecutter-Wolt-00c2e8?style=flat-square&logo=cookiecutter&logoColor=D4AA00&link=https://github.com/woltapp/wolt-python-package-cookiecutter)](https://github.com/woltapp/wolt-python-package-cookiecutter)
 
 
-Welcome to bigrams, a Python project that provides a non-intrusive way to connect tokenized sentences in Ngrams. 
+Welcome to bigrams, a Python project that provides a non-intrusive way to connect tokenized sentences in (N)grams. 
 This tool is designed to work with tokenized sentences, and it is focused on a single task: providing an efficient way 
 to merge tokens from a list of tokenized sentences.
 
-It's non-intrusive as it leaves tokenisation, stopwords removing and other text preprocessing out of its flow.
+It's non-intrusive as it leaves tokenisation, stopwords removal and other text preprocessing out of its flow.
 
 ---
 
@@ -21,7 +21,6 @@ It's non-intrusive as it leaves tokenisation, stopwords removing and other text 
 **PyPI**: [https://pypi.org/project/bigrams/](https://pypi.org/project/bigrams/)
 
 ---
-
 
 
 ## Installation
@@ -74,22 +73,6 @@ poetry shell
 pytest
 ```
 
-### Documentation
-
-The documentation is automatically generated from the content of the [docs directory](./docs) and from the docstrings
- of the public signatures of the source code. The documentation is updated and published as a [Github project page
- ](https://pages.github.com/) automatically as part each release.
-
-### Releasing
-
-Trigger the [Draft release workflow](https://github.com/proteusiq/bigrams/actions/workflows/draft_release.yml)
-(press _Run workflow_). This will update the changelog & version and create a GitHub release which is in _Draft_ state.
-
-Find the draft release from the
-[GitHub releases](https://github.com/proteusiq/bigrams/releases) and publish it. When
- a release is published, it'll trigger [release](https://github.com/proteusiq/bigrams/blob/master/.github/workflows/release.yml) workflow which creates PyPI
- release and deploys updated documentation.
-
 ### Pre-commit
 
 Pre-commit hooks run all the auto-formatters (e.g. `black`, `isort`), linters (e.g. `mypy`, `flake8`), and other quality
@@ -114,3 +97,10 @@ pre-commit run --all-files
 ```
 
 ---
+
+# Contributing are welcome
+
+# ToDo:
+ - [ ] create a save & load function
+ - [ ] compare it with gensim Phrases
+ - [ ] write replacer in Rust - [PyO3](https://github.com/PyO3/pyo3)
