@@ -1,6 +1,6 @@
-# BiGrams
+# (N)Grams
 ![bigrams](bigrams.png)
->Simply create (N)grams
+> Simply create (N)grams: N ~ Bi | Tri ...
 
 [![PyPI](https://img.shields.io/pypi/v/bigrams?style=flat-square)](https://pypi.python.org/pypi/bigrams/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bigrams?style=flat-square)](https://pypi.python.org/pypi/bigrams/)
