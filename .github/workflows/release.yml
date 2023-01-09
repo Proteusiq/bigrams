@@ -13,7 +13,7 @@ jobs:
       - name: Decide semver version based on commit messages
         id: bump-version
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BIGRAM_GITHUB }}
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
