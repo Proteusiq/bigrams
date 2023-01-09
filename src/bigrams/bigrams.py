@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import TypeAlias
 
 from cytoolz import (
     compose,
@@ -13,9 +12,9 @@ from cytoolz import (
 )
 from more_itertools import replace
 
-Sentences: TypeAlias = list[list[str]]
-Dictionary: TypeAlias = dict[tuple[str, str], int]
-Mapper: TypeAlias = dict[tuple[str, ...], str]
+Sentences = list[list[str]]
+Dictionary = dict[tuple[str, str], int]
+Mapper = dict[tuple[str, ...], str]
 
 
 def replacer(
