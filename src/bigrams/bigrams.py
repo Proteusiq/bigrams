@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from typing import List, Dict, Tuple, Set
 from cytoolz import (
     compose,
     concatv,
@@ -11,16 +11,16 @@ from cytoolz import (
 )
 from more_itertools import replace
 
-Sentences = list[list[str]]
-Dictionary = dict[tuple[str, str], int]
-Mapper = dict[tuple[str, ...], str]
+Sentences = List[List[str]]
+Dictionary = Dict[Tuple[str, str], int]
+Mapper = Dict[Tuple[str, ...], str]
 
 
 def replacer(
-    sentence: list[str],
-    bigrams_mapper: dict[tuple[str, str], str],
+    sentence: List[str],
+    bigrams_mapper: Dict[Tuple[str, str], str],
     window_size: int = 2,
-) -> list[str]:
+) -> List[str]:
     """
     Helper function, returns a list of tokens with (N)grams connected
 
@@ -118,25 +118,25 @@ class Grams:
         return self.fit(X).transform(X)
 
     @property
-    def ngrams_(self) -> set[str]:
+    def ngrams_(self) -> Set[str]:
         if not getattr(self, "fitted_", False):
             raise RuntimeError(f"{self} is not fitted.")
 
         return {value for value in self.__X_mapper.values()}
 
     @ngrams_.setter
-    def ngrams_(self, grams: set[str]) -> None:
+    def ngrams_(self, grams: Set[str]) -> None:
         if not getattr(self, "fitted_", False):
             raise RuntimeError(f"{self} is not fitted. Cannot add grams.")
 
         added_grams: Mapper = {tuple(gram.split("_")): gram for gram in grams}
         self.__X_mapper.update(added_grams)
 
-    def add_ngrams(self, grams: set[str]) -> Grams:
+    def add_ngrams(self, grams: Set[str]) -> Grams:
         self.ngrams_ = grams
         return self
 
-    def remove_ngrams(self, grams: set[str]) -> Grams:
+    def remove_ngrams(self, grams: Set[str]) -> Grams:
         if not getattr(self, "fitted_", False):
             raise RuntimeError(f"{self} is not fitted. Cannot delete grams.")
         mapper = {
