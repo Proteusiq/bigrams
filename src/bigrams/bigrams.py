@@ -1,5 +1,7 @@
 from __future__ import annotations
-from typing import List, Dict, Tuple, Set
+
+from typing import Dict, List, Set, Tuple
+
 from cytoolz import (
     compose,
     concatv,
@@ -25,12 +27,12 @@ def replacer(
     Helper function, returns a list of tokens with (N)grams connected
 
     Args:
-        sentence (list[str]): sentence in form of tokens with grams
-        bigrams_mapper (dict[tuple[str, str], str]): a mapper of (t1, t2) => t1_t2
+        sentence (List[str]): sentence in form of tokens with grams
+        bigrams_mapper (Dict[Tuple[str, str], str]): a mapper of (t1, t2) => t1_t2
         window_size (int): how many tokens to be considers: default 2
 
     Returns:
-        list[str]: sentence in form of tokens with (N)grams
+        List[str]: sentence in form of tokens with (N)grams
 
     Usage:
 
