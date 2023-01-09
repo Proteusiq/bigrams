@@ -25,7 +25,7 @@ jobs:
         id: changelog
         shell: bash
         run: |
-          poetry run kacl-cli release ${{ steps.updated_version.outputs.version }} --modify --auto-link
+          poetry run kacl-cli release ${{ steps.updated_version.outputs.version }} --modify --auto-link --force
           echo "" >> CHANGELOG.md
           body=$(poetry run kacl-cli get ${{ steps.updated_version.outputs.version }})
           body="${body//'%'/'%25'}"
