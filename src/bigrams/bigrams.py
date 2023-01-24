@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Final, Dict, List, Set, Tuple
+from typing import Dict, Final, List, Set, Tuple
 
 from cytoolz import (
     compose,
@@ -24,7 +24,7 @@ __FORWARD_REPETITIONS: Final = re.compile(r"(\w+)\s+(\1\s*)|(\1_\w+)+")
 __BACKWARD_REPETITIONS: Final = re.compile(r"_(\w+) (?:\1 ?)")
 
 
-def no_repeat(sentence: SentenceType):
+def no_repeat(sentence: SentenceType) -> str:
 
     sentence_ = __FORWARD_REPETITIONS.sub(r"\2", " ".join(sentence))
     return __BACKWARD_REPETITIONS.sub(r"_\1", sentence_)
@@ -68,7 +68,7 @@ def replacer(
             sliding_window(window_size, sentence),
         ),
     )
-    return sentence_
+    return sentence_(sentence)
 
 
 class Grams:
@@ -175,4 +175,4 @@ class Grams:
             replacer, bigrams=self.ngrams_, window_size=self.window_size
         )
 
-        return [sentence(sentences).split() for sentence in map(_replacer, sentences)]
+        return [sentence.split() for sentence in map(_replacer, sentences)]

@@ -10,7 +10,7 @@ def test_replacer(artifacts: Artifacts) -> None:
             sentence=s,
             bigrams=artifacts.bigrams,
             window_size=2,
-        )(s).split()
+        ).split()
         for s in artifacts.in_sentences
     ]
 

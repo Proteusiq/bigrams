@@ -1,2 +1,2 @@
-from .bigrams import Grams, BigramsType, SentencesType  # noqa
 from .bigrams import replacer  # noqa
+from .bigrams import BigramsType, Grams, SentencesType  # noqa
