@@ -43,4 +43,7 @@ def test_remove_grams(model: Grams) -> None:
 
 def test_add_dictionary(model: Grams) -> None:
     with pytest.raises(AttributeError) as e:
-        model.dictionary = {("jane", "doe")}
+        model.dictionary = {("jane", "doe"): 15}
+
+    msg, *_ = e.value.args
+    assert msg == f"{model} dictionary cannot be override!"

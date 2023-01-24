@@ -10,8 +10,8 @@ def test_replacer(artifacts: Artifacts) -> None:
             sentence=s,
             bigrams=artifacts.bigrams,
             window_size=2,
-        ).split()
+        )
         for s in artifacts.in_sentences
     ]
 
-    assert sentences == artifacts.out_sentences
+    assert [s.split() for s in sentences] == artifacts.out_sentences  # type: ignore

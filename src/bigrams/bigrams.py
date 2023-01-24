@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Dict, Final, List, Set, Tuple
+from typing import Callable, Dict, Final, List, Set, Tuple
 
 from cytoolz import (
     compose,
@@ -61,7 +61,7 @@ def replacer(
     ```
     """
 
-    sentence_ = compose(
+    sentence_: Callable[..., SentenceType] = compose(
         no_repeat,
         lambda d: mapcat(
             (lambda seq: ("_".join(seq),) if seq in bigrams else seq),
@@ -94,7 +94,7 @@ class Grams:
         threshold: int,
         window_size: int = 2,
     ):
-
+        self._dictionary: DictionaryType = {}
         self.window_size = window_size
         self.threshold = threshold
 
@@ -104,7 +104,7 @@ class Grams:
 
     def fit(self, X: SentencesType) -> Grams:
 
-        self.__grams = self.__ngrams(sentences=X)
+        self.__ngrams(sentences=X)
         self.fitted_ = True
 
         return self
@@ -118,37 +118,37 @@ class Grams:
         return self.fit(X).transform(X)
 
     @property
-    def dictionary(self):
+    def dictionary(self) -> DictionaryType:
         return self._dictionary
 
     @dictionary.setter
-    def dictionary(self, value):
-        raise AttributeError("dictionary cannot be override!")
+    def dictionary(self, _: Set[Tuple[str, str]]) -> None:
+        raise AttributeError(f"{self} dictionary cannot be override!")
 
     @property
-    def ngrams_(self) -> Set[str]:
+    def ngrams_(self) -> Set[Tuple[str, str]]:
         if not getattr(self, "fitted_", False):
             raise RuntimeError(f"{self} is not fitted.")
 
         return {gram for gram in self._dictionary.keys()}
 
     @ngrams_.setter
-    def ngrams_(self, grams: Set[str]) -> None:
+    def ngrams_(self, grams: Set[Tuple[str, str]]) -> None:
         if not getattr(self, "fitted_", False):
             raise RuntimeError(f"{self} is not fitted. Cannot add grams.")
 
         d: DictionaryType = {gram: self.threshold for gram in grams}
         self._dictionary.update(d)
 
-    def add_ngrams(self, grams: Set[str]) -> Grams:
+    def add_ngrams(self, grams: Set[Tuple[str, str]]) -> Grams:
         self.ngrams_ = grams
         return self
 
-    def remove_ngrams(self, grams: Set[str]) -> Grams:
+    def remove_ngrams(self, grams: Set[Tuple[str, str]]) -> Grams:
         if not getattr(self, "fitted_", False):
             raise RuntimeError(f"{self} is not fitted. Cannot delete grams.")
         mapper = {
-            key: value for key, value in self._dictionary.items() if value not in grams
+            key: value for key, value in self._dictionary.items() if key not in grams
         }
 
         self._dictionary = mapper
