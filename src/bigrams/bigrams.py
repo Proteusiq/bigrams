@@ -20,14 +20,14 @@ DictionaryType = Dict[Tuple[str, str], int]
 BigramsType = Set[Tuple[str, str]]
 
 
-__FORWARD_REPETITIONS: Final = re.compile(r"\b(\w+)\s+(\1\s*)|(\1_\w+)+\b")
-__BACKWARD_REPETITIONS: Final = re.compile(r"(\S+) (?:\1 ?)")
+__FORWARD_REPETITIONS: Final = re.compile(r"(\w+)\s+(\1\s*)|(\1_\w+)+")
+__BACKWARD_REPETITIONS: Final = re.compile(r"_(\w+) (?:\1 ?)")
 
 
 def no_repeat(sentence: SentenceType):
-    sentence_ = __FORWARD_REPETITIONS.sub(r"\2", " ".join(sentence))
 
-    return __BACKWARD_REPETITIONS.sub(r"\1 ", sentence_)
+    sentence_ = __FORWARD_REPETITIONS.sub(r"\2", " ".join(sentence))
+    return __BACKWARD_REPETITIONS.sub(r"_\1", sentence_)
 
 
 def replacer(
