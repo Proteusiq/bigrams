@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Dict, List, Set, Tuple
+import re
+from typing import Final, Dict, List, Set, Tuple
 
 from cytoolz import (
     compose,
@@ -8,63 +9,63 @@ from cytoolz import (
     frequencies,
     itemfilter,
     map,
+    mapcat,
     partial,
     sliding_window,
 )
-from more_itertools import replace
 
-Sentences = List[List[str]]
+Sentence = List[str]
+Sentences = List[Sentence]
 Dictionary = Dict[Tuple[str, str], int]
-Mapper = Dict[Tuple[str, ...], str]
+Bigrams = Set[Tuple[str, str]]
+
+
+__REPETITIONS: Final = re.compile(r"\b(\w+)\s+(\1\s*)|(\1_\w+)+\b")
+
+
+def no_repeat(sentence: Sentence, pattern: re.Pattern[str] = __REPETITIONS):
+    return pattern.sub(r"\2", " ".join(sentence))
 
 
 def replacer(
-    sentence: List[str],
-    bigrams_mapper: Dict[Tuple[str, str], str],
+    sentence: Sentence,
+    bigrams: Bigrams,
     window_size: int = 2,
-) -> List[str]:
+) -> Sentence:
     """
     Helper function, returns a list of tokens with (N)grams connected
 
     Args:
-        sentence (List[str]): sentence in form of tokens with grams
-        bigrams_mapper (Dict[Tuple[str, str], str]): a mapper of (t1, t2) => t1_t2
-        window_size (int): how many tokens to be considers: default 2
+        sentence : sentence in form of tokens with grams
+        bigrams : a mapper of (t1, t2) => t1_t2
+        window_size : how many tokens to be considers: default 2
 
     Returns:
-        List[str]: sentence in form of tokens with (N)grams
+        sentence : sentence in form of tokens with (N)grams
 
     Usage:
 
     ```python
     from bigrams import replacer
 
-    bigram_mapper={("new", "york"): "new_york",}
+    bigrams = {("new", "york")}
     in_sentence = ["this", "is", "new", "york", "baby", "again!"]
-    out_sentence = replacer(sentence=in_setnece,
-                            bigrams_mapper=bigrams_mapper,
+    out_sentence = replacer(sentence=in_sentence,
+                            bigrams=bigrams,
                             window_size=2,
                     )
     assert out_sentence == ["this", "is", "new_york", "baby", "again!"]
     ```
     """
-    # smart replacer
-    # place for improvement
 
-    for key, value in bigrams_mapper.items():
-        pred = lambda *args: args == key  # flake8: noqa
-        substitutes = [value]
-
-        sentence = [
-            t
-            for t in replace(
-                sentence,
-                pred,
-                substitutes,
-                window_size=window_size,
-            )
-        ]
-    return sentence
+    sentence_ = compose(
+        no_repeat,
+        lambda d: mapcat(
+            (lambda seq: ("_".join(seq),) if seq in bigrams else seq),
+            sliding_window(window_size, sentence),
+        ),
+    )
+    return sentence_
 
 
 class Grams:
