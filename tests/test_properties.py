@@ -7,7 +7,6 @@ def test_ngram(model: Grams, artifacts: Artifacts) -> None:
 
     ngrams = model.fit(X=artifacts.in_sentences).ngrams_
 
-    print(ngrams, type(ngrams))
     assert ngrams == {("baby", "again!"), ("new", "york")}
 
 
