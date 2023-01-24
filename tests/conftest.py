@@ -10,9 +10,9 @@ from .types import Artifacts
 @pytest.fixture()
 def artifacts() -> Generator[Artifacts, None, None]:
     yield Artifacts(
-        bigram_mapper={
-            ("new", "york"): "new_york",
-            ("baby", "again!"): "baby_again!",
+        bigrams={
+            ("new", "york"),
+            ("baby", "again!"),
         },
         in_sentences=[
             ["this", "is", "new", "york", "baby", "again!"],
