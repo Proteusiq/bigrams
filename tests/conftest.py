@@ -15,11 +15,11 @@ def artifacts() -> Generator[Artifacts, None, None]:
             ("baby", "again!"),
         },
         in_sentences=[
-            ["this", "is", "new", "york", "baby", "again!"],
+            ["this", "was", "new", "york", "baby", "again!"],
             ["new", "york", "and", "baby", "again!"],
         ],
         out_sentences=[
-            ["this", "is", "new_york", "baby_again!"],
+            ["this", "was", "new_york", "baby_again!"],
             ["new_york", "and", "baby_again!"],
         ],
     )

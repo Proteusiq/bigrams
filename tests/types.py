@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from bigrams import Bigrams, Sentences
+from bigrams import BigramsType, SentencesType
 
 
 @dataclass
 class Artifacts:
-    bigrams: Bigrams
-    in_sentences: Sentences
-    out_senteces: Sentences
+    bigrams: BigramsType
+    in_sentences: SentencesType
+    out_sentences: SentencesType

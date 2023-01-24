@@ -14,24 +14,27 @@ from cytoolz import (
     sliding_window,
 )
 
-Sentence = List[str]
-Sentences = List[Sentence]
-Dictionary = Dict[Tuple[str, str], int]
-Bigrams = Set[Tuple[str, str]]
+SentenceType = List[str]
+SentencesType = List[SentenceType]
+DictionaryType = Dict[Tuple[str, str], int]
+BigramsType = Set[Tuple[str, str]]
 
 
-__REPETITIONS: Final = re.compile(r"\b(\w+)\s+(\1\s*)|(\1_\w+)+\b")
+__FORWARD_REPETITIONS: Final = re.compile(r"\b(\w+)\s+(\1\s*)|(\1_\w+)+\b")
+__BACKWARD_REPETITIONS: Final = re.compile(r"(\S+) (?:\1 ?)")
 
 
-def no_repeat(sentence: Sentence, pattern: re.Pattern[str] = __REPETITIONS):
-    return pattern.sub(r"\2", " ".join(sentence))
+def no_repeat(sentence: SentenceType):
+    sentence_ = __FORWARD_REPETITIONS.sub(r"\2", " ".join(sentence))
+
+    return __BACKWARD_REPETITIONS.sub(r"\1 ", sentence_)
 
 
 def replacer(
-    sentence: Sentence,
-    bigrams: Bigrams,
+    sentence: SentenceType,
+    bigrams: BigramsType,
     window_size: int = 2,
-) -> Sentence:
+) -> SentenceType:
     """
     Helper function, returns a list of tokens with (N)grams connected
 
@@ -99,18 +102,18 @@ class Grams:
 
         return f"{self.__class__.__name__}(window_size={self.window_size}, threshold={self.threshold})"
 
-    def fit(self, X: Sentences) -> Grams:
+    def fit(self, X: SentencesType) -> Grams:
 
         self.__grams = self.__ngrams(sentences=X)
         self.fitted_ = True
 
         return self
 
-    def transform(self, X: Sentences) -> Sentences:
+    def transform(self, X: SentencesType) -> SentencesType:
 
         return self.__replacer(sentences=X)
 
-    def fit_transform(self, X: Sentences) -> Sentences:
+    def fit_transform(self, X: SentencesType) -> SentencesType:
 
         return self.fit(X).transform(X)
 
@@ -134,7 +137,7 @@ class Grams:
         if not getattr(self, "fitted_", False):
             raise RuntimeError(f"{self} is not fitted. Cannot add grams.")
 
-        d: Dictionary = {gram: self.threshold for gram in grams}
+        d: DictionaryType = {gram: self.threshold for gram in grams}
         self._dictionary.update(d)
 
     def add_ngrams(self, grams: Set[str]) -> Grams:
@@ -152,13 +155,13 @@ class Grams:
 
         return self
 
-    def __ngrams(self, sentences: Sentences) -> Dictionary:
+    def __ngrams(self, sentences: SentencesType) -> DictionaryType:
 
         wordcount = compose(
             frequencies,
             lambda s: sliding_window(self.window_size, concatv(*s)),
         )
-        dictionary: Dictionary = itemfilter(
+        dictionary: DictionaryType = itemfilter(
             lambda m: m[1] >= self.threshold, wordcount(sentences)
         )
 
@@ -166,7 +169,7 @@ class Grams:
 
         return self._dictionary
 
-    def __replacer(self, sentences: Sentences) -> Sentences:
+    def __replacer(self, sentences: SentencesType) -> SentencesType:
 
         _replacer = partial(
             replacer, bigrams=self.ngrams_, window_size=self.window_size
