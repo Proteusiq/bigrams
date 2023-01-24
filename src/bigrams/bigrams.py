@@ -32,8 +32,6 @@ def no_repeat(sentence: SentenceType) -> str:
     sentence_ = __FORWARD_REPETITIONS.sub(r" \2 ", sentence_)
     sentence_ = __BACKWARD_REPETITIONS.sub(r"_\2", sentence_)
     sentence_ = __MIDDLE_REPETITIONS.sub(r" \1_", sentence_)
-  
-
     return __FINAL_REPETITIONS.sub(r" \1", sentence_)
 
 
