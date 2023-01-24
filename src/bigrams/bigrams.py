@@ -71,21 +71,16 @@ def replacer(
 class Grams:
     """
     Grams allows  you to transform a list of tokens into a list of (N)grams tokens
-
     Arguments:
         threshold: how many times should tokens appears together to be connected as ngrams
         window_size: the N in (N)gram. how many words should be considered. defaults = 2
-
     **Usage:**
-
     ```python
     from bigrams import Grams
-
     in_sentences = [["this", "is", "new", "york", "baby", "again!"],
                  ["new", "york", "and", "baby", "again!"],
                 ]
     g = Grams(window_size=2, threshold=2)
-
     out_sentences = g.fit_transform(in_stences)
     out_sentences
     ```
@@ -107,7 +102,6 @@ class Grams:
     def fit(self, X: Sentences) -> Grams:
 
         self.__grams = self.__ngrams(sentences=X)
-        self.__X_mapper: Mapper = {gram: "_".join(gram) for gram in self.__grams}
         self.fitted_ = True
 
         return self
@@ -121,19 +115,27 @@ class Grams:
         return self.fit(X).transform(X)
 
     @property
+    def dictionary(self):
+        return self._dictionary
+
+    @dictionary.setter
+    def dictionary(self, value):
+        raise AttributeError("dictionary cannot be override!")
+
+    @property
     def ngrams_(self) -> Set[str]:
         if not getattr(self, "fitted_", False):
             raise RuntimeError(f"{self} is not fitted.")
 
-        return {value for value in self.__X_mapper.values()}
+        return {gram for gram in self._dictionary.keys()}
 
     @ngrams_.setter
     def ngrams_(self, grams: Set[str]) -> None:
         if not getattr(self, "fitted_", False):
             raise RuntimeError(f"{self} is not fitted. Cannot add grams.")
 
-        added_grams: Mapper = {tuple(gram.split("_")): gram for gram in grams}
-        self.__X_mapper.update(added_grams)
+        d: Dictionary = {gram: self.threshold for gram in grams}
+        self._dictionary.update(d)
 
     def add_ngrams(self, grams: Set[str]) -> Grams:
         self.ngrams_ = grams
@@ -143,10 +145,11 @@ class Grams:
         if not getattr(self, "fitted_", False):
             raise RuntimeError(f"{self} is not fitted. Cannot delete grams.")
         mapper = {
-            key: value for key, value in self.__X_mapper.items() if value not in grams
+            key: value for key, value in self._dictionary.items() if value not in grams
         }
 
-        self.__X_mapper = mapper
+        self._dictionary = mapper
+
         return self
 
     def __ngrams(self, sentences: Sentences) -> Dictionary:
@@ -159,12 +162,14 @@ class Grams:
             lambda m: m[1] >= self.threshold, wordcount(sentences)
         )
 
-        return dictionary
+        self._dictionary = dictionary
+
+        return self._dictionary
 
     def __replacer(self, sentences: Sentences) -> Sentences:
 
         _replacer = partial(
-            replacer, bigrams_mapper=self.__X_mapper, window_size=self.window_size
+            replacer, bigrams=self.ngrams_, window_size=self.window_size
         )
 
-        return [sentence for sentence in map(_replacer, sentences)]
+        return [sentence(sentences).split() for sentence in map(_replacer, sentences)]
