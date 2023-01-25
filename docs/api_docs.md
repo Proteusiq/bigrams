@@ -1,3 +1,7 @@
 # API documentation
 
-:::bigrams
+### Replacer
+:::bigrams.bigrams.replacer
+
+### Grams
+:::bigrams.bigrams.Grams
