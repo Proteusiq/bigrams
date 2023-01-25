@@ -35,7 +35,6 @@ def no_repeat(sentence: SentenceType) -> str:
     return __FINAL_REPETITIONS.sub(r" \1", sentence_)
 
 
-
 def replacer(
     sentence: SentenceType,
     bigrams: BigramsType,
