@@ -27,6 +27,28 @@ __FINAL_REPETITIONS: Final = re.compile(r"\s+(\w+)\s+\1")
 
 
 def no_repeat(sentence: SentenceType) -> str:
+    """
+    Removes repeating words in a sentence after merge.
+
+    Args:
+    sentence (SentenceType): The sentence to process.
+
+    Returns:
+    str: The sentence without repeating words.
+
+    Note:
+    The function uses the regular expressions in the variables
+    __X_REPETITIONS
+    e.g. ["Jane", "Jane_Doe", "is", "home", "home"] => "Jane_Doe is home"
+
+    Usage:
+    ```python
+    from bigrams import no_repeat
+
+    sentence = ["Jane", "Jane_Doe", "is", "home", "home"]
+    sentence_ = no_repeat(sentence)
+    assert sentence_ == "Jane_Doe is home"
+    """
 
     sentence_ = " ".join(sentence)
     sentence_ = __FORWARD_REPETITIONS.sub(r" \2 ", sentence_)
