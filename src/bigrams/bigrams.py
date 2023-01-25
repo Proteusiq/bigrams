@@ -88,14 +88,14 @@ def replacer(
     ```
     """
 
-    sentence_: Callable[..., SentenceType] = compose(
+    sentence_fn: Callable[..., SentenceType] = compose(
         no_repeat,
         lambda d: mapcat(
             (lambda seq: ("_".join(seq),) if seq in bigrams else seq),
             sliding_window(window_size, sentence),
         ),
     )
-    return sentence_(sentence)
+    return sentence_fn(sentence)
 
 
 class Grams:
