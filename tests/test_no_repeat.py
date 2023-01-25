@@ -1,8 +1,8 @@
 from typing import List, Tuple
+
 import pytest
 
 from bigrams import no_repeat
-
 
 TEST_EXAMPLES = [
     (
