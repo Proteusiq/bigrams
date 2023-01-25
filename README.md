@@ -1,11 +1,11 @@
 # (N)Grams
-![bigrams](bigrams.png)
+![bigrams](assets/bigrams.png)
 > Simply create (N)grams: N ~ Bi | Tri ...
 
 [![PyPI](https://img.shields.io/pypi/v/bigrams?style=flat-square)](https://pypi.python.org/pypi/bigrams/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bigrams?style=flat-square)](https://pypi.python.org/pypi/bigrams/)
 [![PyPI - License](https://img.shields.io/pypi/l/bigrams?style=flat-square)](https://pypi.python.org/pypi/bigrams/)
-[![Coookiecutter - Wolt](https://img.shields.io/badge/cookiecutter-Wolt-00c2e8?style=flat-square&logo=cookiecutter&logoColor=D4AA00&link=https://github.com/woltapp/wolt-python-package-cookiecutter)](https://github.com/woltapp/wolt-python-package-cookiecutter)
+[![HitCount](https://hits.dwyl.com/proteusiq/bigrams.svg)](https://hits.dwyl.com/proteusiq/bigrams)
 
 
 Welcome to bigrams, a Python project that provides a non-intrusive way to connect tokenized sentences in (N)grams.

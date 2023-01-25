@@ -14,9 +14,9 @@ theme:
         name: Switch to light mode
 
 nav:
-  - Introduction: 'index.md'
-  - api_docs.md
-  - changelog.md
+  - Introduction: index.md
+  - API: api_docs.md
+  - ChangeLogs: changelog.md
 
 markdown_extensions:
   - pymdownx.snippets:
@@ -28,9 +28,14 @@ plugins:
       default_handler: python
       handlers:
         python:
-          rendering:
-            show_signature_annotations: true
-            show_source: true
-            show_submodules: true
-      watch:
-        - src/bigrams
+          options:
+            docstring_style: google
+            separate_signature: yes
+            show_signature_annotations: fase
+            show_source: no
+            show_root_full_path: yes
+            merge_init_into_class: yes
+            show_submodules: false
+
+watch:
+  - src/bigrams
