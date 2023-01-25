@@ -101,6 +101,7 @@ pre-commit run --all-files
 # Contributing are welcome
 
 # ToDo:
+ - [ ] Create Scikit-learn compatible transformer
  - [ ] ~~create a save & load function~~
  - [ ] compare it with gensim Phrases
  - [ ] write replacer in Rust - [PyO3](https://github.com/PyO3/pyo3)
