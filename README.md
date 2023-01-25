@@ -42,7 +42,7 @@ in_sentences = [["this", "is", "new", "york", "baby", "again!"],
             ]
 g = Grams(window_size=2, threshold=2)
 
-out_sentences = g.fit_transform(in_stences)
+out_sentences = g.fit_transform(in_sentences)
 print(out_sentences)
 # [["this", "is", "new_york", "baby_again!"],
 #   ["new_york", "and", "baby_again!"],
